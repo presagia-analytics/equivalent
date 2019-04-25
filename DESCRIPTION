@@ -1,0 +1,15 @@
+Package: equivalent
+Title: Test if Objects are Equivalent
+Version: 0.0.1
+Authors@R: c(
+  person("Michael", "Kane",
+    role = c("aut", "cph", "cre"),
+    email = "mkane@presagia.ai",
+    comment = "http://orcid.org/0000-0003-1899-6662"
+    ))
+Description: An equivalence relation is a binary relation that is reflexive, symmetric and transitive. The relation "is equal to" is the canonical example but in regression and clustering it is often helpful to abstract this notion. For example, columns in a data frame may be almost colinear, encoding equivalent information, without being equal. Likewise, two factor vectors of the same length can have a 1-1 relationship between levels without being equal. This package provides utilities for testing these equivalent relationships.
+License: Apache License 2.0
+Encoding: UTF-8
+Imports: crayon
+LazyData: true
+RoxygenNote: 6.1.1
