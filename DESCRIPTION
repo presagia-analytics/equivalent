@@ -13,3 +13,5 @@ Encoding: UTF-8
 Imports: crayon
 LazyData: true
 RoxygenNote: 6.1.1
+Suggests: 
+    testthat
