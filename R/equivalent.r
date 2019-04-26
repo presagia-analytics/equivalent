@@ -120,18 +120,25 @@ equiv.factor <- function(x, y, factor_equiv_character = TRUE, ...) {
 }
 
 #' @export
-equiv.tibble <- function(x, y, factor_equiv_character = TRUE, ...) {
+equiv.data.frame <- function(x, y, factor_equiv_character = TRUE, ...) {
+  # ignore list columns
+  browser()
   ret <- FALSE
-  if (ncol(x) == 1) {
-    x <- as.vector(x[,1])
+  dots <- list(...)
+  if (!is.null(dots$ignore_list_columns) && dots$ignore_list_columns) {
+    x <- x[, unlist(lapply(x, is.list)), drop == FALSE]
+    y <- y[, unlist(lapply(x, is.list)), drop == FALSE]
   }
-  if (!is.vector(y)) {
-    if (inherits(y, "tibble") && ncol(y) == 1) {
-      y <- as.vector(y[,1])
+  if (inherits(y, "data.frame")) {
+    if (ncol(x) == 0 && ncol(y) == 0) {
+      ret <- TRUE
+    } else {
+      if (isTRUE(all(dim(x) == dim(y)))) {
+        ret <- isTRUE(all(vapply(seq_len(ncol(x)), 
+          function(j) equiv(x[[j]], y[[j]], factor_equiv_character),
+          FALSE)))
+      }
     }
-  }
-  if (is.vector(x) && is.vector(y)) {
-    ret <- equiv(x, y)
   }
   ret
 }
