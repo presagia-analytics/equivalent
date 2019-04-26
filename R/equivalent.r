@@ -122,7 +122,6 @@ equiv.factor <- function(x, y, factor_equiv_character = TRUE, ...) {
 #' @export
 equiv.data.frame <- function(x, y, factor_equiv_character = TRUE, ...) {
   # ignore list columns
-  browser()
   ret <- FALSE
   dots <- list(...)
   if (!is.null(dots$ignore_list_columns) && dots$ignore_list_columns) {
