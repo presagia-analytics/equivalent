@@ -4,10 +4,12 @@
 \alias{remove_equiv_columns}
 \title{Remove redundant equivalent columns}
 \usage{
-remove_equiv_columns(x, verbose = FALSE)
+remove_equiv_columns(x, keep_cols = character(), verbose = FALSE)
 }
 \arguments{
 \item{x}{a data.frame that may have repeated, equivalent columns.}
+
+\item{keep_cols}{a character vector of columsn that should be kept.}
 
 \item{verbose}{should information about dropped columns be printed? 
 (default FALSE)}

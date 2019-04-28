@@ -20,6 +20,10 @@ expect_true(equiv(factor(a), factor(b)))
 
 iris$Sepal.Length2 <- 3 * iris$Sepal.Length + 3
 
-equiv_columns(iris)
+equiv_col_matrix(iris)
 
 remove_equiv_columns(iris)
+
+expect_true(equiv(iris[-1], remove_equiv_columns(iris, "Sepal.Length2")))
+
+
