@@ -246,9 +246,13 @@ has_equiv_column <- function(x, keep_cols = character(), verbose = FALSE) {
 remove_equiv_columns <- function(x, keep_cols = character(), verbose = FALSE) {
   ec <- has_equiv_column(x, keep_cols, verbose)
   if (verbose) {
-    cat(italic("Dropping redundant columns:", 
-               paste(names(ec)[ec], collapse = "\n\t\t"), 
-               "\n"))
+    if (any(ec)) {
+      cat(italic("Dropping equivalent columns:", 
+                 paste(names(ec)[ec], collapse = "\n\t\t"), 
+                 "\n"))
+    } else {
+      cat(italic("No equivalent columns found.\n"))
+    }
   }
   x[, !ec]
 }
