@@ -172,13 +172,6 @@ equiv_col_matrix <- function(x) {
   ret
 }
 
-#' @title Find the equivalent repeated columns in a matrix or data.frame
-#'
-#' @description Test the columns from right to left to find out which
-#' ones are duplicated. A vector is returned with TRUE indicating 
-#' columns that are duplicated.
-#' @param x a matrix or data.frame.
-#' @export
 equiv_cols <- function(x) {
   ret <- rep(FALSE, ncol(x))
   x <- as.data.frame(x)
@@ -190,6 +183,48 @@ equiv_cols <- function(x) {
     }
   }
   ret
+}
+
+#' @title Find the equivalent repeated columns in a matrix or data.frame
+#'
+#' @description Test the columns from right to left to find out which
+#' ones are duplicated. A vector is returned with TRUE indicating 
+#' columns that are duplicated.
+#' @param x a matrix or data.frame.
+#' @param keep_cols a character vector of columsn that should be kept.
+#' @param verbose should information about dropped columns be printed? 
+#' @export
+has_equiv_column <- function(x, keep_cols = character(), verbose = FALSE) {
+  if (!isTRUE(all(keep_cols %in% colnames(x)))) {
+    not_keeping <- setdiff(keep_cols, colnames(x))
+    warning(yellow("The following keep columns were not in x and will",
+                   "be removed:", not_keeping))
+
+    keep_cols <- setdiff(keep_cols, not_keeping)
+  }
+  equivs <- rep(FALSE, ncol(x))
+  names(equivs) <- colnames(x)
+  if (length(keep_cols) > 0) {
+    not_keep <- setdiff(colnames(x), keep_cols)
+    for (keep in keep_cols) {
+      equiv_to_keep <- 
+        unlist(lapply(x[,not_keep], function(j) equiv(x[[keep]], j)))
+      equivs[names(equiv_to_keep)[equiv_to_keep]] <- TRUE
+    }
+    prev_nk <- character()
+    for (nk in rev(not_keep)) {
+      prev_nk <- c(prev_nk, nk)
+      equiv_to_nk <- 
+        unlist(lapply(x[,setdiff(not_keep, prev_nk)], 
+                      function(j) equiv(x[[nk]], j)))
+      equivs[names(equiv_to_nk)[equiv_to_nk]] <- TRUE
+    }
+    equivs
+  } else {
+    equivs <- equiv_cols(x)
+    names(equivs) <- names(x)
+  }
+  equivs
 }
 
 #' @title Remove redundant equivalent columns
@@ -206,35 +241,16 @@ equiv_cols <- function(x) {
 #' remove_equiv_columns(iris)
 #' 
 #' @return a data frame where redundant columns have been dropeed.
-#' @importFrom crayon green
+#' @importFrom crayon italic
 #' @export
 remove_equiv_columns <- function(x, keep_cols = character(), verbose = FALSE) {
-  if (!isTRUE(all(keep_cols %in% colnames(x)))) {
-    not_keeping <- setdiff(keep_cols, colnames(x))
-    warning(yellow("The following keep columns were not in x and will",
-                   "be removed:", not_keeping))
-
-    keep_cols <- setdiff(keep_cols, not_keeping)
+  ec <- has_equiv_column(x, keep_cols, verbose)
+  if (verbose) {
+    cat(italic("Dropping redundant columns:", 
+               paste(names(ec)[ec], collapse = "\n\t\t"), 
+               "\n"))
   }
-  if (length(keep_cols) > 0) {
-    not_keep <- setdiff(colnames(x), keep_cols)
-    for (keep in keep_cols) {
-      rem <- unlist(lapply(x[,not_keep], function(j) equiv(x[[keep]], j)))
-      if (sum(rem) > 0) {
-        x <- x[,-which(rem)]
-      }
-    }
-  } else {
-    x <- x[, !equiv_cols(x)]
-  }
-  x
-#  if (verbose) {
-#    if (sum(redundant_cols) > 0) {
-#      cat(green(paste("Dropping redundant columns", 
-#                  paste(colnames(x)[redundant_cols], collapse = " ")), "\n"))
-#    } else {
-#      cat(green("No redundant columns to drop.\n"))
-#    }
+  x[, !ec]
 }
 
 

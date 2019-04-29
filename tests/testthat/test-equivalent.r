@@ -2,6 +2,8 @@ library(testthat)
 
 context("Equivalence testing")
 
+data(iris)
+
 a <- rnorm(10)
 b <- 2 * a + 4
 # TRUE because they are the same (up to an affine transformation).
@@ -27,3 +29,9 @@ remove_equiv_columns(iris)
 expect_true(equiv(iris[-1], remove_equiv_columns(iris, "Sepal.Length2")))
 
 
+iris$Sepal.Length3 <- 4 * iris$Sepal.Length + 3
+
+has_equiv_column(iris, "Sepal.Length2")
+
+iris$Petal.Length2 <- 4 * iris$Petal.Length+ 3
+has_equiv_column(iris, "Sepal.Length2")
