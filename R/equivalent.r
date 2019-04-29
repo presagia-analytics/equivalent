@@ -247,7 +247,7 @@ remove_equiv_columns <- function(x, keep_cols = character(), verbose = FALSE) {
   ec <- has_equiv_column(x, keep_cols, verbose)
   if (verbose) {
     if (any(ec)) {
-      cat(italic("Dropping equivalent columns:", 
+      cat(italic("\tDropping equivalent columns:", 
                  paste(names(ec)[ec], collapse = "\n\t\t"), 
                  "\n"))
     } else {
