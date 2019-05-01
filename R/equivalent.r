@@ -29,11 +29,15 @@ equiv <- function(x, y, factor_equiv_character = TRUE, ...) {
 #' @importFrom crayon yellow
 #' @export
 equiv.default <- function(x, y, factor_equiv_character = TRUE, ...) {
-  if (isTRUE(any(class(x) == class(y)))) { 
+  ret <- FALSE
+  if (is.null(x) && is.null(y)) {
+    ret <- TRUE
+  }
+  else if (isTRUE(any(class(x) == class(y)))) { 
     warning(yellow(paste("Don't know how to test for equivalence between", 
                   class(x), "and", class(y))))
   }
-  FALSE
+  ret
 }
 
 #' @export
