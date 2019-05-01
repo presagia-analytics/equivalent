@@ -1,6 +1,6 @@
 Package: equivalent
 Title: Test if Objects are Equivalent
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
   person("Michael", "Kane",
     role = c("aut", "cph", "cre"),

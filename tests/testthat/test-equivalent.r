@@ -24,11 +24,6 @@ iris$Sepal.Length2 <- 3 * iris$Sepal.Length + 3
 
 equiv_col_matrix(iris)
 
-remove_equiv_columns(iris)
-
-expect_true(equiv(iris[-1], remove_equiv_columns(iris, "Sepal.Length2")))
-
-
 iris$Sepal.Length3 <- 4 * iris$Sepal.Length + 3
 
 has_equiv_column(iris, "Sepal.Length2")
