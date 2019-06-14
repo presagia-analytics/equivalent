@@ -109,6 +109,23 @@ equiv.character <- function(x, y, factor_equiv_character = TRUE, ...) {
 }
 
 #' @export
+equiv.logical <- function(x, y) {
+  ret <- FALSE
+  if (is.logical(y)) {
+    x_nas <- which(is.na(x))
+    y_nas <- which(is.na(y))
+    if (length(x_nas) == length(y_nas) && isTRUE(all(x_nas == y_nas))) {
+      x <- na.omit(x)
+      y <- na.omit(y)
+      if (isTRUE(all(x == y) | all(x == !y))) {
+        ret <- TRUE
+      }
+    }
+  }
+  ret
+}
+
+#' @export
 equiv.factor <- function(x, y, factor_equiv_character = TRUE, ...) {
   ret <- FALSE
   if (is.character(y) && factor_equiv_character) {
