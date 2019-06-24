@@ -30,3 +30,13 @@ has_equiv_column(iris, "Sepal.Length2")
 
 iris$Petal.Length2 <- 4 * iris$Petal.Length+ 3
 has_equiv_column(iris, "Sepal.Length2")
+
+al <- c(list(c("a", "a"), c("b", "b")))
+bl <- c(list(c("b", "a"), c("b", "b")))
+
+
+expect_true(equiv(NULL, NULL))
+
+expect_true(equiv(al, al))
+
+expect_false(equiv(al, bl))

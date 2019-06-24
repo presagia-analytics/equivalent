@@ -163,6 +163,20 @@ equiv.data.frame <- function(x, y, factor_equiv_character = TRUE, ...) {
   ret
 }
 
+#' @export
+equiv.list <- function(x, y) {
+  ret <- FALSE
+  if (equiv(names(x), names(y))) {
+    if (length(x) == length(y)) {
+      equivs <- vapply(seq_along(x), function(i) equiv(x[[i]], y[[i]]), FALSE)
+      if (isTRUE(all(equivs))) {
+        ret <- TRUE
+      }
+    }
+  }
+  ret
+}
+
 #' @title Find equivalent columns in a matrix or data.frame
 #' 
 #' @description Test all column combinations to find out which ones are 
